@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>จดหมายจากเดือนยี่</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+body {
+  margin: 0;
+  background: #cfe0eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* กล่องหลัก */
+.box {
+  background: #f7f5f2;
+  color: #303335;
+  padding: 24px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+/* ปุ่ม */
+button {
+  margin-top: 14px;
+  padding: 10px 18px;
+  background: #303335;
+  color: #f7f5f2;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.choice {
+  display: block;
+  width: 100%;
+}
+
+.msg {
+  margin-top: 12px;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+  <source src="musicc.mp4" type="audio/mp4">
+</audio>
+
+<div class="box" id="app"></div>
+
+<script>
+const app = document.getElementById("app");
+const bgm = document.getElementById("bgm");
+let locked = false;
+
+/* พิมพ์ทีละตัว */
+function typeText(text, callback) {
+  let i = 0;
+  app.innerHTML = `<p id="text"></p>`;
+  const el = document.getElementById("text");
+
+  const timer = setInterval(() => {
+    el.innerHTML += text[i] === "\n" ? "<br>" : text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(timer);
+      if (callback) callback();
+    }
+  }, 120);
+}
+
+/* หน้าแรก */
+typeText("จดหมายจากเดือนยี่", () => {
+  app.innerHTML += `
+    <button onclick="readLetter()">อ่าน</button>
+    <button onclick="dontRead()">ไม่อ่าน</button>
+  `;
+});
+
+function dontRead() {
+  locked = true;
+  app.innerHTML = "<p>คุณเลือกไม่อ่านแล้ว</p>";
+}
+
+function readLetter() {
+  if (locked) return;
+  bgm.volume = 0.5;
+  bgm.play();
+  page1();
+}
+
+/* หน้า 1 */
+function page1() {
+  typeText("TO ไอ้เคะโรมิ", () => {
+    app.innerHTML += `<button onclick="page2()">ถัดไป</button>`;
+  });
+}
+
+/* หน้า 2 */
+function page2() {
+  typeText("ไม่ใช่ม่านเมฆห้ามอ่าน เข้าใจปะ", () => {
+    app.innerHTML += `<button onclick="page3()">ถัดไป</button>`;
+  });
+}
+
+/* คำถาม */
+function page3() {
+  typeText("คำถามแรก\nเมฆ ฉันเรียกแกว่าอะไร", () => {
+    app.innerHTML += `
+      <button class="choice" onclick="correct()">1. ยัยบ๊อง</button>
+      <button class="choice" onclick="semi()">2. เป่าเป้ย</button>
+      <button class="choice" onclick="wrong()">3. ม่านเมฆ</button>
+      <div class="msg" id="m"></div>
+    `;
+  });
+}
+
+function correct() {
+  document.getElementById("m").innerText = "เก่งว่ะ จำได้ด้วย";
+  setTimeout(page4, 1500);
+}
+
+function semi() {
+  document.getElementById("m").innerText =
+    "เออ อันนี้ก็ถูกแหละ แต่เมฆตัวจริงไม่น่ากด";
+  setTimeout(page4, 1800);
+}
+
+function wrong() {
+  app.innerHTML = "<p>เสียใจด้วย</p><p>ออกอัตโนมัติ</p>";
+  bgm.pause();
+  locked = true;
+}
+
+/* หน้าสุดท้าย */
+function page4() {
+  typeText(
+`ถึง ไอ้บ๊อง เลิกทำตัวบ๊องได้รึยัง อือ ขอโทษที่วันนี้ทำนิสัยไม่ดีใส่
+ถึงจริง ๆ จะทำทุกวันก็เหอะ เรียกร้องความสนใจเฉย ๆ อ่ะ
+อยากให้สนใจไง ไม่งั้นไม่ทำอะไรแบบนี้หรอก เหนื่อยชิบ
+
+อย่างแรกเลยนะ เรื่องความสัมพันธ์เรา เข้าใจว่าในสายตาแกยี่ดูไม่จริงจังแหละ
+แต่ก็อ่า ช่วงนั้นก็ไม่ได้จริงจังจริง ๆ มันเลยเป็นแบบนั้น
+
+แต่พอรอบข้างมันเริ่มกดดัน รู้สึกว่าการอยู่แบบนี้ต่อไปมันไม่ดีต่อเราทั้งคู่
+โดยเฉพาะแก คือมันเหมือนยื้อ แกก็น่าจะเก็ท เพราะยี่เอาแต่ใจมาก ๆ แบบ มาก ๆ
+บางวันจะคบ บางวันจะเลิก หงิง T T เลวเอง ขอโทษ
+
+หลังจากนี้จะจริงจังแล้ว โอเคไหม เพราะยี่พึ่งคิดได้ว่า ถ้าไม่จริงจัง จะโดนแกทิ้ง
+ซึ่งเคยโดนมารอบนึง บอกตามตรง ตอนนั้นรู้สึกจะร้องไห้ แบบ เออ
+แกไม่ต้องมียี่แล้ว งี้ แต่ด้วยอีโก้มันค้ำคอ ยี่ก็ไม่ได้ง้อแก แฮะ ขอโทษ
+
+แต่อันที่จริงยี่ก็ชอบแก หมายถึง ขาดไม่ได้ เออ ชอบตอนแกง้อ มันน่ารัก
+แล้วก็ชอบตอนแกดุแบบบ๊อง ๆ โครตชอบ แบบนี้เลยหมาไง
+
+ไม่รู้ว่าเขียนมายาวแค่ไหนแล้วอ่ะ แต่ตอนนี้มันคงจริงจังมากพอแล้วใช่ไหม t t
+อีกนิดจะหมาจริง ๆ แล้ว เพราะงั้นเมฆ แกเชื่อหน่อย ฉันชอบแก ขอโทษที่ให้รอนาน`,
+    () => {
+      app.innerHTML += "<p>— จบ —</p>";
+    }
+  );
+}
+</script>
+
+</body>
+  </html>
